@@ -1,50 +1,83 @@
 def Open(file_name, mode):
+    """Безпечне відкриття текстового файлу."""
     try:
         file = open(file_name, mode, encoding="utf-8")
-    except:
-        print("Файл", file_name, "не вдалося відкрити")
+    except OSError as error:
+        print(f"Файл {file_name} не вдалося відкрити: {error}")
         return None
     else:
-        print("Файл", file_name, "було відкрито")
+        print(f"Файл {file_name} було відкрито")
         return file
 
 
-file1_name = "TF9_1.txt"
-file2_name = "TF9_2.txt"
+def create_input_file():
+    """Створення та заповнення файлу TF9_1.txt."""
+    file_name = "TF9_1.txt"
 
-file_1_w = Open(file1_name, "w")
-if file_1_w != None:
-    file_1_w.write(
-        "Короткий рядок\n"
-        "Цей рядок довший за двадцять символів\n"
-        "Рівно 20 символів...\n"
-        "Привіт\n"
-    )
+    file = Open(file_name, "w")
+
+    if file is None:
+        return
+
+    # Початкові тестові рядки різної довжини
+    lines = [
+        "Короткий рядок",
+        "Цей рядок довший за двадцять символів",
+        "Рівно 20 символів...",
+        "Привіт"
+    ]
+
+    for line in lines:
+        file.write(line + "\n")
+
+    file.close()
+
     print("Інформацію успішно додано до TF9_1.txt")
-    file_1_w.close()
     print("Файл TF9_1.txt закрито")
 
-file_2_r = Open(file1_name, "r")
-file_2_w = Open(file2_name, "w")
 
-if file_2_r != None and file_2_w != None:
-    for line in file_2_r.read().splitlines():
-        if len(line) < 20:
-            formatted_line = line.ljust(20)
-        else:
-            formatted_line = line[:20]
+def process_file():
+    """Оброблення TF9_1.txt та створення TF9_2.txt."""
+    file1_name = "TF9_1.txt"
+    file2_name = "TF9_2.txt"
 
-        file_2_w.write(formatted_line + "\n")
+    file_2_r = Open(file1_name, "r")
+    file_2_w = Open(file2_name, "w")
 
-    file_2_r.close()
-    file_2_w.close()
-    print("Файли закрито")
+    if file_2_r is not None and file_2_w is not None:
+        for line in file_2_r.read().splitlines():
 
-print("Результат з файлу TF9_2:")
-file_3_r = Open(file2_name, "r")
-if file_3_r != None:
-    for line in file_3_r.read().splitlines():
-        print(f"'{line}' (довжина: {len(line)})")
+            # Доповнення або обрізання рядка до 20 символів
+            if len(line) < 20:
+                formatted_line = line.ljust(20)
+            else:
+                formatted_line = line[:20]
 
-    file_3_r.close()
-    print("Файл TF9_2.txt закрито")
+            file_2_w.write(formatted_line + "\n")
+
+        file_2_r.close()
+        file_2_w.close()
+
+        print("Файли TF9_1.txt та TF9_2.txt закрито")
+
+
+def print_result():
+    """Виведення вмісту TF9_2.txt у консоль."""
+    file_name = "TF9_2.txt"
+
+    print("\nРезультат з файлу TF9_2:")
+
+    file_3_r = Open(file_name, "r")
+
+    if file_3_r is not None:
+        for line in file_3_r.read().splitlines():
+            print(f"'{line}' (довжина: {len(line)})")
+
+        file_3_r.close()
+        print("Файл TF9_2.txt закрито")
+
+
+if __name__ == "__main__":
+    create_input_file()
+    process_file()
+    print_result()
