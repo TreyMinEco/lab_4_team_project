@@ -61,6 +61,24 @@ def process_file():
         print("Файли TF9_1.txt та TF9_2.txt закрито")
 
 
+def create_backup():
+    """Створення дубліката TF9_2.txt під назвою TF9_2(reserve).txt."""
+    source_name = "TF9_2.txt"
+    backup_name = "TF9_2(reserve).txt"
+
+    file_src = Open(source_name, "r")
+    file_dst = Open(backup_name, "w")
+
+    if file_src is not None and file_dst is not None:
+        file_dst.write(file_src.read())
+
+        file_src.close()
+        file_dst.close()
+
+        print(f"Резервну копію успішно створено: {backup_name}")
+        print(f"Файли {source_name} та {backup_name} закрито")
+
+
 def print_result():
     """Виведення вмісту TF9_2.txt у консоль."""
     file_name = "TF9_2.txt"
@@ -80,4 +98,5 @@ def print_result():
 if __name__ == "__main__":
     create_input_file()
     process_file()
+    create_backup()
     print_result()
