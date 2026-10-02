@@ -38,15 +38,20 @@ def create_input_file():
     print("Файл TF9_1.txt закрито")
 
 def is_file_empty(file_name):
-    if os.path.isfile(file_name):
-        print(f"Файл {file_name} існує, перевіряємо на порожнечу")
-    else:
-        raise FileNotFoundError(f"Помилка: файл {file_name} не знайдено")
+    """Перевірка на існування та порожнечу файлу."""
+    file = Open(file_name, "r")
+    if file is None:
+        return True
 
-    with open(file_name, "r") as file:
-        content = file.read()
-        if content == "":
-            raise ValueError("Помилка: файл порожній")
+    content = file.read().strip()
+    file.close()
+
+    if not content:
+        print(f"Увага: Файл {file_name} порожній!")
+        return True
+
+    print(f"Файл {file_name} містить дані, продовжуємо обробку.")
+    return False
 
 def process_file():
     """Оброблення TF9_1.txt та створення TF9_2.txt."""
