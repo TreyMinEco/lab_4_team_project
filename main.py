@@ -1,3 +1,5 @@
+import os
+
 def Open(file_name, mode):
     """Безпечне відкриття текстового файлу."""
     try:
@@ -35,6 +37,21 @@ def create_input_file():
     print("Інформацію успішно додано до TF9_1.txt")
     print("Файл TF9_1.txt закрито")
 
+def is_file_empty(file_name):
+    """Перевірка на існування та порожнечу файлу."""
+    file = Open(file_name, "r")
+    if file is None:
+        return True
+
+    content = file.read().strip()
+    file.close()
+
+    if not content:
+        print(f"Увага: Файл {file_name} порожній!")
+        return True
+
+    print(f"Файл {file_name} містить дані, продовжуємо обробку.")
+    return False
 
 def process_file():
     """Оброблення TF9_1.txt та створення TF9_2.txt."""
@@ -97,6 +114,7 @@ def print_result():
 
 if __name__ == "__main__":
     create_input_file()
+    is_file_empty("TF9_1.txt")
     process_file()
     create_backup()
     print_result()
